@@ -1,11 +1,16 @@
 import React, { useState, useEffect } from 'react'
-import { Container, Row, Col, Form, Button, Table } from 'react-bootstrap'
+import { Container, Row, Col, Form, Button, Table, Modal } from 'react-bootstrap'
 
 export default function HomePage() {
    const [input, setInput] = useState('')
    const [date, setDate] = useState('')
    const [data, setData] = useState([])
    const [number, setNumber] = useState(1)
+
+   const [show, setShow] = useState(false);
+
+   const handleClose = () => setShow(false);
+   const handleShow = () => setShow(true);
 
    const handleInputOnChange = (e) => {
       setInput(e.target.value)
@@ -17,11 +22,16 @@ export default function HomePage() {
       e.preventDefault();
       const temp = []
       data.map((key) => {
-         temp.push({number: key.number, todo: key.todo, date: key.date})
+         temp.push({
+            number: key.number, 
+            todo: key.todo, 
+            date: key.date
+         })
       })
       temp.push({number: number, todo: input, date: date})
       setData(temp)
       setNumber(number+1)
+      handleClose()
    }
 
    return (
@@ -47,10 +57,25 @@ export default function HomePage() {
 
             </Row>
 
-            <Button variant="primary" type="submit" onClick={handleBtnSubmitOnClick}>
+            <Button variant="primary"  onClick={handleShow}>
                Submit
             </Button>
          </Form>
+
+         <Modal show={show} onHide={handleClose}>
+            <Modal.Header closeButton>
+               <Modal.Title>TodoList</Modal.Title>
+            </Modal.Header>
+            <Modal.Body>Woohoo, Do you want to save this todo?</Modal.Body>
+            <Modal.Footer>
+               <Button variant="secondary" onClick={handleClose}>
+                  Cancel
+               </Button>
+               <Button variant="primary" onClick={handleBtnSubmitOnClick}>
+                  Save
+               </Button>
+            </Modal.Footer>
+         </Modal>
 
          <br/>
 
